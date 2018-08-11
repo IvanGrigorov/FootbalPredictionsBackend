@@ -57,10 +57,50 @@ class UserController extends CustomAbstractController
      */
     public function info(Request $request) {
 
+        $isUserLogged = $this->checkForLoggedUser($request);
+        if (isset($isUserLogged['Error'])) {
+            return $this->json($isUserLogged);
+        }
+
         $token = $request->headers->get('token');
         $repository = $this->getDoctrine()->getRepository(Users::class);
         $authManager = new AuthManager($repository);
         return $this->json($authManager->getUserInfo($token));
     }
+
+    /**
+     * @Route("/setAdminRole", name="user_as_admin")
+     */
+    public function setUserAsAdmin(Request $request) {
+
+        $isUserLogged = $this->checkForLoggedUser($request);
+        if (isset($isUserLogged['Error'])) {
+            return $this->json($isUserLogged);
+        }
+
+        $token = $request->headers->get('token');
+        $repository = $this->getDoctrine()->getRepository(Users::class);
+        $entityManager = $this->getDoctrine()->getManager();
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->setUserAsAdmin($token));
+    }
+
+    /**
+     * @Route("/setUserRole", name="user_as_user")
+     */
+    public function setUserAsUser(Request $request) {
+
+        $isUserLogged = $this->checkForLoggedUser($request);
+        if (isset($isUserLogged['Error'])) {
+            return $this->json($isUserLogged);
+        }
+
+        $token = $request->headers->get('token');
+        $repository = $this->getDoctrine()->getRepository(Users::class);
+        $entityManager = $this->getDoctrine()->getManager();
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->setUserAsUser($token));
+    }
+
 
 }

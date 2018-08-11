@@ -38,6 +38,10 @@ class AuthManager implements AuthInterface {
         $user->setName($username);
         $user->setPassword($saltedPass);
         $user->setSalt($salt);
+
+        // Default role is user 
+        $user->setRole('USER');
+
         $this->entityMngr->persist($user);
         $this->entityMngr->flush();
         return array(
@@ -134,7 +138,7 @@ class AuthManager implements AuthInterface {
         $userInfoFromRequest = $this->getUserInfo($token);
         if (!isset($userInfoFromRequest['Error'])) {
             return array(
-                'Success' => 'Authentocated',
+                'Success' => 'Authenticated',
                 'Msg' => 'User is authenticated'
             );
         }
@@ -144,5 +148,57 @@ class AuthManager implements AuthInterface {
                 'Msg' => 'Cannot access it without log in'
             );
         }
+    }
+
+    function checkIfUserIsAdminByToken($token) {
+        $userInfoFromRequest = $this->getUserInfo($token);
+        if (!isset($userInfoFromRequest['Error']) 
+            && $userInfoFromRequest['Msg']['role'] == 'ADMIN') {
+            return array(
+                'Success' => 'UserIsAdmin',
+                'Msg' => 'User is admin'
+            );
+        }
+        else {
+            return array(
+                'Error' => 'NotAdmin',
+                'Msg' => 'User is not admin'
+            );
+        }
+    }
+
+    public function setUserAsAdmin($token) {
+        $user = $this->repo->findUserByToken($token);
+        if ($user->getRole() == 'ADMIN') {
+            return array(
+                'Error' => 'SetUserAsAdminFail',
+                'Msg' => 'User is already an admin'
+            );
+        }
+        $user->setRole("ADMIN");
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'SetUserAsAdminSuccess',
+            'Msg' => 'User is changed to admin successfuly'
+        );
+
+    }
+
+    
+    public function setUserAsUser($token) {
+        $user = $this->repo->findUserByToken($token);
+        if ($user->getRole() == 'USER') {
+            return array(
+                'Error' => 'SetUserAsUserFail',
+                'Msg' => 'User is already a user'
+            );
+        }
+        $user->setRole("USER");
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'SetUserAsUserSuccess',
+            'Msg' => 'User is changed to user successfuly'
+        );
+
     }
 }
