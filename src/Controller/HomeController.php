@@ -2,10 +2,10 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\AbstractController\CustomAbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController {
+class HomeController extends CustomAbstractController {
 
     /**
      * Matches /home exactly

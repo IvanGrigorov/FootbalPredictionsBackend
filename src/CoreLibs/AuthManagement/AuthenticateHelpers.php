@@ -1,5 +1,5 @@
 <?php
-namespace App\CoreLibs;
+namespace App\CoreLibs\AuthManagement;
 
 class AuthenticateHelpers {
 
