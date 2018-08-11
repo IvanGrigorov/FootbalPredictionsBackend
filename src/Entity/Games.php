@@ -37,4 +37,10 @@ class Games
 
         return $this;
     }
+
+    public function formatGame(): array {
+        return array(
+            'name' => $this->getName()
+        );
+    }
 }

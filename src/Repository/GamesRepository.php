@@ -47,4 +47,9 @@ class GamesRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findAllGames() {
+        return $this->createQueryBuilder('g')
+            ->getQuery()
+            ->getResult();
+    }
 }
