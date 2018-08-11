@@ -2,15 +2,15 @@
 namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\AbstractController\CustomAbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use App\CoreLibs\AuthenticateHelpers;
 use App\Entity\Users;
 use App\Entity\AuthenticationTokens;
+use App\CoreLibs\AuthManagement\Auth\Lib\AuthManager;
 
 
 
-class UserController extends AbstractController
+class UserController extends CustomAbstractController
 {
     /**
      * @Route("/signUp", name="user_sign_up")
@@ -19,30 +19,10 @@ class UserController extends AbstractController
     {
         $username = $request->request->get('username');
         $hashedPass = $request->request->get('password');
-        $salt = AuthenticateHelpers::getRandomSalt(10);
-        $saltedPass = crypt($hashedPass, $salt);
-
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()->getRepository(Users::class);
-
-        // Check for same username 
-        $sameUsernameEntities = $repository->findByUsername($username);
-        if (!empty($sameUsernameEntities)) {
-            return $this->json(
-                array(
-                    'Error' => 'DuplicateUserError',
-                    'Msg' => 'There is already a user with that username'
-                )
-            );
-        }
-
-        // Save user if everithing is ok
-        $user = new Users();
-        $user->setName($username);
-        $user->setPassword($saltedPass);
-        $user->setSalt($salt);
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->signUp($username, $hashedPass));
 
 
     }
@@ -52,50 +32,12 @@ class UserController extends AbstractController
      */
     public function login(Request $request) {
 
-
         $username = $request->request->get('username');
         $hashedPass = $request->request->get('password');
-
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()->getRepository(Users::class);
-
-        // Check for same username 
-        $userIfExistsByUsername = $repository->findOneByUsername($username);
-        if (!empty($sameUsernameEntities)) {
-            return $this->json(
-                array(
-                    'Error' => 'NoSuchUserError',
-                    'Msg' => 'There is no such user with this username'
-                )
-            );
-        }
-        $saltForUser = $userIfExistsByUsername->getSalt();
-
-        // Succssesful Login
-        if (crypt($hashedPass, $saltForUser) == $userIfExistsByUsername->getPassword()) {
-            // Set Token
-            $token =  AuthenticateHelpers::getRandomSalt(20);
-            $authenticationEntity = new AuthenticationTokens();
-            $authenticationEntity->setToken($token);
-            $authenticationEntity->setUserId($userIfExistsByUsername->getId());
-            $entityManager->persist($authenticationEntity);
-            $entityManager->flush();
-            return $this->json(
-                array(
-                    'Success' => 'SuccssesfulLogin',
-                    'Token' => $token
-                )
-            );
-        }
-        else {
-            return $this->json(
-                array(
-                    'Error' => 'NoSuchUserError',
-                    'Msg' => 'There is no such user with this password'
-                )
-            );
-        }
-
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->logIn($username, $hashedPass));
     }
 
     /**
@@ -103,57 +45,22 @@ class UserController extends AbstractController
      */
     public function logout(Request $request) {
 
-        $token = $request->request->get('token');
-
+        $token = $request->headers->get('token');
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()->getRepository(AuthenticationTokens::class);
-
-        $authenticationTokenEntity = $repository->findOneByToken($token);
-        if (!empty($authenticationTokenEntity)) {
-            $entityManager->remove($authenticationTokenEntity);
-            $entityManager->flush();
-            return $this->json(
-                array(
-                    'Success' => 'SuccessfulLogOut',
-                    'Msg' => 'You have logged out successfully'
-                )
-            );
-        }
-        else {
-            return $this->json(
-                array(
-                    'Error' => 'LogOutError',
-                    'Msg' => 'There was some error when you tried to log out'
-                )
-            );
-        }
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->logOut($token));
     }
+
     /**
      * @Route("/info", name="user_info")
      */
     public function info(Request $request) {
-        $token = $request->request->get('token');
+
+        $token = $request->headers->get('token');
         $repository = $this->getDoctrine()->getRepository(Users::class);
-        $user = $repository->findUserByToken($token);
-        if (!empty($user)) {
-            return $this->json(
-                array(
-                    'Success' => 'UserInfo',
-                    'Msg' => $user->formatUser()
-                )
-            );
-        }
-        else {
-            return $this->json(
-                array(
-                    'Error' => 'ErroGettingUserInfo',
-                    'Msg' => 'No user info for this user token'
-                )
-            );
-        }
-
-
-
+        $authManager = new AuthManager($repository);
+        return $this->json($authManager->getUserInfo($token));
     }
 
 }
