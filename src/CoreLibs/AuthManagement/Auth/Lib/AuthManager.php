@@ -167,8 +167,8 @@ class AuthManager implements AuthInterface {
         }
     }
 
-    public function setUserAsAdmin($token) {
-        $user = $this->repo->findUserByToken($token);
+    public function setUserAsAdmin($username) {
+        $user = $this->repo->findOneByUsername($username);
         if ($user->getRole() == 'ADMIN') {
             return array(
                 'Error' => 'SetUserAsAdminFail',
@@ -185,8 +185,8 @@ class AuthManager implements AuthInterface {
     }
 
     
-    public function setUserAsUser($token) {
-        $user = $this->repo->findUserByToken($token);
+    public function setUserAsUser($username) {
+        $user = $this->repo->findOneByUsername($username);
         if ($user->getRole() == 'USER') {
             return array(
                 'Error' => 'SetUserAsUserFail',
@@ -200,5 +200,22 @@ class AuthManager implements AuthInterface {
             'Msg' => 'User is changed to user successfuly'
         );
 
+    }
+
+    public function deleteUserByUsername($username) {
+        $user = $this->repo->findOneByUsername($username);
+        if(empty($user)) {
+            return array(
+                'Error' => 'UnsuccessfulUserDelete',
+                'Msg' => 'No such user with this username '.$username
+            );
+        } 
+        $this->entityMngr->remove($user);
+        $this->entityMngr->flush();
+        return
+            array(
+                'Success' => 'SuccessfulUserDelet',
+                'Msg' => 'You have deleted the user '.$username.' successfuly'
+            );
     }
 }

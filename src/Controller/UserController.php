@@ -73,16 +73,17 @@ class UserController extends CustomAbstractController
      */
     public function setUserAsAdmin(Request $request) {
 
-        $isUserLogged = $this->checkForLoggedUser($request);
-        if (isset($isUserLogged['Error'])) {
-            return $this->json($isUserLogged);
+        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+
+        if (isset($isAdminLogged['Error'])) {
+            return $this->json($isAdminLogged);
         }
 
-        $token = $request->headers->get('token');
+        $username = $request->request->get('username');
         $repository = $this->getDoctrine()->getRepository(Users::class);
         $entityManager = $this->getDoctrine()->getManager();
         $authManager = new AuthManager($repository, $entityManager);
-        return $this->json($authManager->setUserAsAdmin($token));
+        return $this->json($authManager->setUserAsAdmin($username));
     }
 
     /**
@@ -90,17 +91,37 @@ class UserController extends CustomAbstractController
      */
     public function setUserAsUser(Request $request) {
 
-        $isUserLogged = $this->checkForLoggedUser($request);
-        if (isset($isUserLogged['Error'])) {
-            return $this->json($isUserLogged);
+        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+
+        if (isset($isAdminLogged['Error'])) {
+            return $this->json($isAdminLogged);
         }
 
-        $token = $request->headers->get('token');
+        $username = $request->request->get('username');
         $repository = $this->getDoctrine()->getRepository(Users::class);
         $entityManager = $this->getDoctrine()->getManager();
         $authManager = new AuthManager($repository, $entityManager);
-        return $this->json($authManager->setUserAsUser($token));
+        return $this->json($authManager->setUserAsUser($username));
     }
 
+    /**
+     * @Route("/deleteUser", name="delete_user")
+     */
+    public function deleteUserByUsername(Request $request) {
+
+        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+
+        if (isset($isAdminLogged['Error'])) {
+            return $this->json($isAdminLogged);
+        }
+
+        $username = $request->request->get('username');
+        $repository = $this->getDoctrine()->getRepository(Users::class);
+        $entityManager = $this->getDoctrine()->getManager();
+        $authManager = new AuthManager($repository, $entityManager);
+        return $this->json($authManager->deleteUserByUsername($username));
+
+
+    }
 
 }
