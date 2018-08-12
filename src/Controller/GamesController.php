@@ -33,9 +33,10 @@ class GamesController extends CustomAbstractController
      */
     public function insertGame(Request $request) {
 
-        $isUserLogged = $this->checkForLoggedUser($request);
-        if (isset($isUserLogged['Error'])) {
-            return $this->json($isUserLogged);
+        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+
+        if (isset($isAdminLogged['Error'])) {
+            return $this->json($isAdminLogged);
         }
 
         $gameName = $request->request->get('gameName');

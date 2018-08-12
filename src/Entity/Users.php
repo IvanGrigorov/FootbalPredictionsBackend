@@ -31,6 +31,12 @@ class Users
      */
     private $salt;
 
+    /**
+     * @ORM\Column(type="string", columnDefinition="ENUM('ADMIN', 'USER')")
+     */
+    private $role;
+
+    
     public function getId()
     {
         return $this->id;
@@ -72,10 +78,23 @@ class Users
         return $this;
     }
 
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+    
+
     public function formatUser() {
         return array(
             'name' => $this->getName(),
-            //'role' => $this->getRole()
+            'role' => $this->getRole()
         );
     }
 }

@@ -37,8 +37,26 @@ abstract class CustomAbstractController extends AbstractController {
         }
     }
 
-    public function checkIfAdminIsLogged() {
+    public function checkIfAdminIsLogged($request) {
+        $repository = $this->getDoctrine()->getRepository(Users::class);
+        $authManager = new AuthManager($repository);
+        $checkAuth = $this->checkForLoggedUser($request);
 
+        if (isset($checkAuth['Error'])) {
+            return $checkAuth;
+        }
+
+        $checkAdmin = $authManager->checkIfUserIsAdminByToken($request->headers->get('token'));
+        if (isset($checkAdmin['Error'])) {
+            return $checkAdmin;
+        }
+        else {
+            return 
+                array(
+                    'Success' => 'IsAdmin',
+                    'Msg' => 'The user is admin'
+                );
+        }
     }
 }
 
