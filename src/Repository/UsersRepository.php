@@ -70,6 +70,7 @@ class UsersRepository extends ServiceEntityRepository
         ;
     }
 
+
     public function findUserByToken($token)
     {
         return $this->createQueryBuilder('u')
