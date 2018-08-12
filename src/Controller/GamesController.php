@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\Games;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\AbstractController\CustomAbstractController;
+use App\CoreLibs\GameManagement\Game\Lib\GameManager;
 
 class GamesController extends CustomAbstractController
 {
@@ -16,15 +17,11 @@ class GamesController extends CustomAbstractController
     public function getAllGames()
     {
         $repository = $this->getDoctrine()->getRepository(Games::class);
-        $allGames = $repository->findAllGames();
-        $convertedGames = array();
-        foreach($allGames as $game) {
-            $convertedGames[] = $game->formatGame();
-        }
+        $gameManager = new GameManager($repository);
 
         return $this->json([
             'Success' => 'GettingAllGames',
-            'Msg' => $convertedGames,
+            'Msg' => $gameManager->getAllGames(),
         ]);
     }
 
@@ -39,16 +36,10 @@ class GamesController extends CustomAbstractController
             return $this->json($isAdminLogged);
         }
 
-        $gameName = $request->request->get('gameName');
-        $game = new Games();
-        $game->setName($gameName);
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($game);
-        $entityManager->flush();
-        return $this->json([
-            'Success' => 'InsertingTheGame',
-            'Msg' => 'The game '. $gameName . ' has been inserted successfully',
-        ]);
+        $gameManager = new GameManager(null, $entityManager);
+        $gameName = $request->request->get('gameName');
+        return $this->json($gameManager->insertGame($gameName));
 
     }
 
