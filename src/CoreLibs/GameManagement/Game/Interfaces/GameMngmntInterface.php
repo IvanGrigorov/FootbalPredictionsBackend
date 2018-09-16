@@ -8,4 +8,6 @@ interface GameMngmntInterface {
 
     function insertGame($gameName);
 
+    function getGameIdByName($gameName);
+
 }
