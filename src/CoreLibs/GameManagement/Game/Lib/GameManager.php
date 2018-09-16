@@ -42,5 +42,14 @@ class GameManager implements GameMngmntInterface {
         );
     }
 
+    function getGameIdByName($gameName) {
+        $gameId = $this->repo->findGameIdByGameName($gameName);
+        return array(
+            'Success' => 'GettingGameId',
+            'GameId' => $gameId,
+            'Msg' => 'The game Id has been gathered successfully',
+        );    
+    }
+
 
 }

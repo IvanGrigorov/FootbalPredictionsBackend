@@ -32,8 +32,9 @@ class Users
     private $salt;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('ADMIN', 'USER')")
+     * @ORM\Column(type="string", length=255)
      */
+    //columnDefinition="ENUM('ADMIN', 'USER')"
     private $role;
 
     
