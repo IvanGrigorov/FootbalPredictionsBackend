@@ -47,4 +47,30 @@ class RoundStandingsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getRoundStandingsForAllUsers($roundId) {
+        return $this->createQueryBuilder('r')
+            ->select('r, u.name')
+            ->from('App\Entity\Users', 'u')
+            ->andWhere('r.UserId = u.id')
+            ->andWhere('r.RoundId = :val')
+            ->setParameter('val', $roundId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getRoundStandingsForSpecificUser($roundId, $userId) {
+        return $this->createQueryBuilder('r')
+            ->select('r, u.name')
+            ->from('App\Entity\Users', 'u')
+            ->andWhere('r.UserId = :userId')
+            ->andWhere('r.UserId = u.id')
+            ->andWhere('r.RoundId = :val')
+            ->setParameter('val', $roundId)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

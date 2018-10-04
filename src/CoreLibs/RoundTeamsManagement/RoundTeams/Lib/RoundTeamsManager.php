@@ -42,4 +42,8 @@ class RoundTeamsManager implements RoundTeamsManagerInterface {
             'Msg' => $convertedTeams,
         );
     }
+
+    public function insertTeamsForRound($roundId, $teamsJSON) {
+        
+    }
 }
