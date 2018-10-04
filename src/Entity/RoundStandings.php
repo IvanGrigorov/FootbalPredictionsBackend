@@ -29,7 +29,7 @@ class RoundStandings
     /**
      * @ORM\Column(type="smallint")
      */
-    private $points;
+    private $Points;
 
     public function getId()
     {
@@ -62,13 +62,20 @@ class RoundStandings
 
     public function getPoints(): ?int
     {
-        return $this->points;
+        return $this->Points;
     }
 
     public function setPoints(int $points): self
     {
-        $this->points = $points;
+        $this->Points = $points;
 
         return $this;
+    }
+
+    public function formatRoundStandings() {
+        return array(
+            'roundId' => $this->getRoundId(),
+            'points' => $this->getPoints()
+        );
     }
 }
