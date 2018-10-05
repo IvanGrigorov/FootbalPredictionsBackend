@@ -36,15 +36,20 @@ class PredictionsRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?Predictions
+    
+    public function findPredictionsByRoundId($roundId): ?Predictions
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('r, u.name', 'rt.Host', 'rt.Guest')
+            ->from('App\Entity\Users', 'u')
+            ->from('App\Entity\RoundTeams', 'rt') 
+            ->andWhere('p.RoindId = :val')
+            ->andWhere('rt.id = p.')
+            ->andWhere('u.id = p.RoundTeamsId')
+            ->setParameter('val', $roundId)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
+    
 }

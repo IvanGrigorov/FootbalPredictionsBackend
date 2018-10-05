@@ -46,5 +46,16 @@ class AuthenticationTokensRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findByToken($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.user_id')
+            ->andWhere('a.token = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
     
 }
