@@ -44,7 +44,5 @@ class RoundStandingsController extends CustomAbstractController
         $roundStandingsManager = new RoundStandingsManager(null, $entityManager);
         return $this->json($roundStandingsManager->uploadRoundStandingsForSpecificUser($roundId, $userId, $points));
 
-
-
     }
 }
