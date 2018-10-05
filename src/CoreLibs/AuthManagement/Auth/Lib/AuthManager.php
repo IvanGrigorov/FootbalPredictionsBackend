@@ -218,4 +218,12 @@ class AuthManager implements AuthInterface {
                 'Msg' => 'You have deleted the user '.$username.' successfuly'
             );
     }
+
+    public function getUserIdByToken($token) {
+        $user = $this->repo->findByToken($token);
+        return array(
+            'Success' => 'GetUserIdbyToken',
+            'Msg' => $user
+        );
+    }
 }
