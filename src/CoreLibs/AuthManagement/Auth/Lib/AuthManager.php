@@ -226,4 +226,12 @@ class AuthManager implements AuthInterface {
             'Msg' => $user
         );
     }
+
+    public function getAllUsers() {
+        $users = $this->repo->findAllUsers();
+        return array(
+            'Success' => 'GetUserIdbyToken',
+            'Msg' => $user
+        );
+    }
 }

@@ -31,6 +31,11 @@ class RealResults
      */
     private $Guest;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $RoundId;
+
     public function getId()
     {
         return $this->id;
@@ -68,6 +73,19 @@ class RealResults
     public function setGuest(int $Guest): self
     {
         $this->Guest = $Guest;
+
+        return $this;
+    }
+
+    
+    public function getRoundId(): ?int
+    {
+        return $this->RoundId;
+    }
+
+    public function setRoundId(int $roundId): self
+    {
+        $this->RoundId = $roundId;
 
         return $this;
     }

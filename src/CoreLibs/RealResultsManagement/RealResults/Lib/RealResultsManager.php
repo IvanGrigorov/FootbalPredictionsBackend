@@ -35,4 +35,12 @@ class RealResultsManager implements RealResultsManagementInterface {
 
     }
 
+    public function getRealResultsForRound($roundId) {
+        $realResults = $this->repo->getRealResultsForRoundId($roundId);
+        return array(
+            'Success' => 'GettingRealResultsForRound',
+            'Msg' => $realResults,
+        );
+    }
+
 }

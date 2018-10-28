@@ -47,4 +47,14 @@ class RealResultsRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getRealResultsForRoundId($roundId) {
+        return $this->createQueryBuilder('rr')
+            ->select('rr.RoundTeamsId', 'rr.Host', 'rr.Guest', 'rr.RoundId')
+            ->andWhere('rr.RoundId = :val')
+            ->setParameter('val', $roundId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
