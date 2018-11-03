@@ -51,5 +51,21 @@ class PredictionsRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findPredictionsForRoundByUserId($roundId, $userId) {
+        return $this->createQueryBuilder('p')
+            ->select('p.Host', 'p.Guest', 'p.RoundTeamsId', 'u.name', 'rt.Host as HostName', 'rt.Guest as GuestName')
+            ->from('App\Entity\Users', 'u')
+            ->from('App\Entity\RoundTeams', 'rt') 
+            ->andWhere('p.RoindId = :roundId')
+            ->andWhere('p.UserId = :userId')
+            ->andWhere('rt.id = p.RoundTeamsId')
+            ->andWhere('u.id = p.UserId')
+            ->setParameter('roundId', $roundId)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     
 }

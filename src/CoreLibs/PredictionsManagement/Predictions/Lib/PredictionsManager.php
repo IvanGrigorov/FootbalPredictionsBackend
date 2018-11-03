@@ -48,6 +48,14 @@ class PredictionsManager implements PredictionsManagementInterface {
         );
     }
 
+    public function getPredictionForRoundByUserId($userId, $roundId) {
+        $predictions = $this->repo->findPredictionsForRoundByUserId($roundId, $userId);
+        return array(
+            'Success' => 'GetPredictionForRoundByUserId',
+            'Msg' => $predictions,
+        );
+    }
+
         //$realResultsDecoded = json_decode($realResultsJSON, true);
         //foreach ($realResultsDecoded as $realResultsObject) {
         //    $realResults = new RealResults();
