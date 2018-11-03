@@ -4,8 +4,6 @@ namespace App\CoreLibs\GenerationStandingsManagement\GenerationStandings\Interfa
 
 interface GenerationStandingsManagementInterface {
 
-    //function insertMultiplePredictions($predictionsJSON, $roundId, $userId);
-    
-    //public function getPredictionsForRound($roundId);
-    
+    public function generateStandings($gameId, $roundId);
+        
 }
