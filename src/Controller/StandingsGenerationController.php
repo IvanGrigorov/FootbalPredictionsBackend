@@ -10,6 +10,8 @@ use App\CoreLibs\PredictionsManagement\Predictions\Lib\PredictionsManager;
 use App\CoreLibs\RealResultsManagement\RealResults\Lib\RealResultsManager;
 use App\CoreLibs\RoundStandingsManagement\RoundStandings\Lib\RoundStandingsManager;
 use App\CoreLibs\GeneralStandingsManagement\GeneralStandings\Lib\GeneralStandingsManager;
+use App\CoreLibs\RoundGenerationStatusManagement\RoundGenerationStatus\Lib\RoundGenerationStatusManager;
+use App\Entity\RoundGenerationStatus;
 use App\Entity\Standings;
 use App\Entity\RoundStandings;
 use App\Entity\GamesAndUsers;
@@ -36,7 +38,17 @@ class StandingsGenerationController extends CustomAbstractController
         $roundStandingsManager = new RoundStandingsManager($realResultsRepository, $entityManager);
         $generalStandingsRepository = $this->getDoctrine()->getRepository(Standings::class);
         $generalStandingsManager = new GeneralStandingsManager($generalStandingsRepository, $entityManager);
-        $generationStandingsManager = new GenerationStandingsManager($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, null, $entityManager);
+        $roundGenerationStatusRepository = $this->getDoctrine()->getRepository(RoundGenerationStatus::class);
+        $roundGenerationStatusManager = new RoundGenerationStatusManager($roundGenerationStatusRepository, $entityManager);
+        $generationStandingsManager = new GenerationStandingsManager(
+            $gameAndUsersManager,
+            $predictionsManager, 
+            $realResultsManager, 
+            $roundStandingsManager, 
+            $generalStandingsManager,
+            $roundGenerationStatusManager,
+            null, 
+            $entityManager);
         return $this->json($generationStandingsManager->generateStandings($game, $round));
  
     }

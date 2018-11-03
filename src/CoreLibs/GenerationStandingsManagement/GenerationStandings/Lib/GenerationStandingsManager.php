@@ -16,9 +16,10 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
     private $realResultsManager;
     private $roundStandingsManager;
     private $generalStandingsManager;
+    private $roundGenerationStatusManager;
 
     //function __construct($authManager, $gameAndUsersManager, $repostory, $entityManager = null) {
-    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $repostory, $entityManager = null) {
+    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $roundGenerationStatusManager, $repostory, $entityManager = null) {
         $this->repo = $repostory;
         $this->entityMngr = $entityManager;
         $this->gameAndUsersManager = $gameAndUsersManager;
@@ -26,10 +27,19 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
         $this->realResultsManager = $realResultsManager;
         $this->roundStandingsManager = $roundStandingsManager;
         $this->generalStandingsManager = $generalStandingsManager;
+        $this->roundGenerationStatusManager = $roundGenerationStatusManager;
 
     }
 
     public function generateStandings($gameId, $roundId) {
+        $roundStatus =  $this->roundGenerationStatusManager->getStatusForRound($roundId);
+
+        if (!empty($roundStatus['Msg'])) {
+            return array(
+                'Error' => 'GenerateStandingsError',
+                'Msg' => 'Standings for round ' . $roundId . ' already generated'
+            );
+        }
 
         $getAllUsersForGame = $this->gameAndUsersManager->getAllUsersForGame($gameId);
         
@@ -57,7 +67,11 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
             $generalStandingsForUser = $this->generalStandingsManager->getCurrentGeneralStandingsForUser($gameId, $userInfo['UserId']);
             $this->generalStandingsManager->updateGeneralStandingsForUser($generalStandingsForUser, $gameId, $userInfo['UserId'], $userRoundPointsInfo);
         }
-        return 'Success';
+        $this->roundGenerationStatusManager->setStatusForRound($roundId);
+        return array(
+            'Success' => 'GenerateStandingsSuccessForUsers',
+            'Msg' => 'Successfully generated Results'
+        );
     }
 
     private function getRealResultsForRound($roundId) {
