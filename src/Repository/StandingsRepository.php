@@ -57,4 +57,16 @@ class StandingsRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function getGeneralStandingsForGame($gameId) {
+        return $this->createQueryBuilder('s')
+            ->select('s.Points, u.name')
+            ->from('App\Entity\Users', 'u')
+            ->andWhere('s.UserId = u.id')
+            ->andWhere('s.GameId = :val')
+            ->setParameter(':val', $gameId)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }
