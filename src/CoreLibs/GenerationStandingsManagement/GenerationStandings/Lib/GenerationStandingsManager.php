@@ -17,9 +17,10 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
     private $roundStandingsManager;
     private $generalStandingsManager;
     private $roundGenerationStatusManager;
+    private $pointStandingsManager;
 
     //function __construct($authManager, $gameAndUsersManager, $repostory, $entityManager = null) {
-    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $roundGenerationStatusManager, $repostory, $entityManager = null) {
+    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $roundGenerationStatusManager, $pointStandingsManager, $repostory, $entityManager = null) {
         $this->repo = $repostory;
         $this->entityMngr = $entityManager;
         $this->gameAndUsersManager = $gameAndUsersManager;
@@ -28,6 +29,7 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
         $this->roundStandingsManager = $roundStandingsManager;
         $this->generalStandingsManager = $generalStandingsManager;
         $this->roundGenerationStatusManager = $roundGenerationStatusManager;
+        $this->pointStandingsManager = $pointStandingsManager;
 
     }
 
@@ -52,13 +54,14 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
     private function generate($gameId, $userIdCollections, $roundId) {
 
         $realResultsForRound = $this->getRealResultsForRound($roundId);
+        $pointSettings = $this->pointStandingsManager->getPointSettingsForGame($gameId);
         foreach($userIdCollections as $userInfo) {
             $predictionsInfo[$userInfo['UserId']] = $this->predictionsManager->getPredictionForRoundByUserId($userInfo['UserId'], $roundId);
             $userRoundPointsInfo = 0;
             foreach($realResultsForRound['Msg'] as $realResult) {
                foreach($predictionsInfo[$userInfo['UserId']]['Msg'] as $userPredictions) {
                    if ($realResult['RoundTeamsId'] == $userPredictions['RoundTeamsId']) {
-                       $userRoundPointsInfo += $this->calculatePointsForMatch($realResult, $userPredictions);
+                       $userRoundPointsInfo += $this->calculatePointsForMatch($realResult, $userPredictions, $pointSettings['Msg']);
                        break;
                    }
                }
@@ -79,22 +82,25 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
         return $realResults;
     }
 
-    private function calculatePointsForMatch($realResultsInfo, $userPredictionsInfo) {
+    private function calculatePointsForMatch($realResultsInfo, $userPredictionsInfo, $pointSettings) {
+        $pointsCorrectResult = $pointSettings->getPointsCorrectResult();
+        $pointsCorrectFixture = $pointSettings->getPointsCorrectFixture();
+        $pointsAmountOfGoals = $pointSettings->getPointsAmountOfGoals();
         if (($realResultsInfo['Host'] == $userPredictionsInfo['Host']) && 
             ($realResultsInfo['Guest'] == $userPredictionsInfo['Guest'])) {
-                return 3;
+                return $pointsCorrectResult;
         }
         else if ( ($realResultsInfo['Host'] < $realResultsInfo['Guest']) && 
                 ($userPredictionsInfo['Host'] < $userPredictionsInfo['Guest']) ) {
-                return 1;
+                return $pointsCorrectFixture;
         }
         else if ( ($realResultsInfo['Host'] > $realResultsInfo['Guest']) && 
                 ($userPredictionsInfo['Host'] > $userPredictionsInfo['Guest']) ) {
-                return 1;
+                return $pointsCorrectFixture;
         }
         else if ( ($realResultsInfo['Host'] == $realResultsInfo['Guest']) && 
                 ($userPredictionsInfo['Host'] == $userPredictionsInfo['Guest']) ) {
-                return 1;
+                return $pointsCorrectFixture;
         }
     }
 

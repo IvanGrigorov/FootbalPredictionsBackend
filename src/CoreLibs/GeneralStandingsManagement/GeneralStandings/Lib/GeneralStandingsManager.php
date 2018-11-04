@@ -23,6 +23,14 @@ class GeneralStandingsManager implements GeneralStandingsManagerInterface {
         );
     }
 
+    public function getCurrentGeneralStandingsForGame($gameId) {
+        $gameStandingsInfo = $this->repo->getGeneralStandingsForGame($gameId);
+        return array(
+            'Success' => 'GetCurrentStandingsForGameSuccess',
+            'Msg' => $gameStandingsInfo
+        );
+    }
+
     function updateGeneralStandingsForUser($generalStandingsForUser, $gameId, $userId, $points) {
         if (empty($generalStandingsForUser['Msg'])) {
             $generalStandingsForUser['Msg'] = new Standings();
@@ -39,6 +47,7 @@ class GeneralStandingsManager implements GeneralStandingsManagerInterface {
         $this->entityMngr->flush();
         
     }
+
 
 
 }

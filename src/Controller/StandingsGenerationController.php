@@ -11,6 +11,8 @@ use App\CoreLibs\RealResultsManagement\RealResults\Lib\RealResultsManager;
 use App\CoreLibs\RoundStandingsManagement\RoundStandings\Lib\RoundStandingsManager;
 use App\CoreLibs\GeneralStandingsManagement\GeneralStandings\Lib\GeneralStandingsManager;
 use App\CoreLibs\RoundGenerationStatusManagement\RoundGenerationStatus\Lib\RoundGenerationStatusManager;
+use App\CoreLibs\PointSettingsManagement\PointSettings\Lib\PointSettingsManager;
+use App\Entity\PointSettings;
 use App\Entity\RoundGenerationStatus;
 use App\Entity\Standings;
 use App\Entity\RoundStandings;
@@ -40,6 +42,8 @@ class StandingsGenerationController extends CustomAbstractController
         $generalStandingsManager = new GeneralStandingsManager($generalStandingsRepository, $entityManager);
         $roundGenerationStatusRepository = $this->getDoctrine()->getRepository(RoundGenerationStatus::class);
         $roundGenerationStatusManager = new RoundGenerationStatusManager($roundGenerationStatusRepository, $entityManager);
+        $pointSettingsRepository = $this->getDoctrine()->getRepository(PointSettings::class);
+        $pointSettingsManager = new PointSettingsManager($pointSettingsRepository, $entityManager);
         $generationStandingsManager = new GenerationStandingsManager(
             $gameAndUsersManager,
             $predictionsManager, 
@@ -47,6 +51,7 @@ class StandingsGenerationController extends CustomAbstractController
             $roundStandingsManager, 
             $generalStandingsManager,
             $roundGenerationStatusManager,
+            $pointSettingsManager,
             null, 
             $entityManager);
         return $this->json($generationStandingsManager->generateStandings($game, $round));
