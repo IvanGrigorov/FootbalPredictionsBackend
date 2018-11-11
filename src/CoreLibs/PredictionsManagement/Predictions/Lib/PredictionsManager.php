@@ -1,21 +1,17 @@
 <?php
 
 namespace App\CoreLibs\PredictionsManagement\Predictions\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\PredictionsManagement\Predictions\Interfaces\PredictionsManagementInterface;
 use App\Entity\Predictions;
 
 
-class PredictionsManager implements PredictionsManagementInterface {
+class PredictionsManager extends AbstractManager implements PredictionsManagementInterface {
 
-    private $repo;
-    private $entityMngr;
     private $predictionsSettingsManager;
 
-
-
-    function __construct($predictionsSettingsManager, $repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null, $predictionsSettingsManager = null) {
+        parent::__construct($repository, $entityManager);
         $this->predictionsSettingsManager = $predictionsSettingsManager;
 
     }

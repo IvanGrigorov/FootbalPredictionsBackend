@@ -1,18 +1,14 @@
 <?php
 
 namespace App\CoreLibs\PointSettingsManagement\PointSettings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\PointSettingsManagement\PointSettings\Interfaces\PointSettingsManagerInterface;
 use App\Entity\PointSettings;
 
-class PointSettingsManager implements PointSettingsManagerInterface {
+class PointSettingsManager extends AbstractManager implements PointSettingsManagerInterface {
 
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function setPointSettingsForGame($gameId, $pointSettingsJSON) {

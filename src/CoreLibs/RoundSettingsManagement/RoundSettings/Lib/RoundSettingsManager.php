@@ -1,18 +1,15 @@
 <?php
 
 namespace App\CoreLibs\RoundSettingsManagement\RoundSettings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RoundSettingsManagement\RoundSettings\Interfaces\RoundSettingsManagementInterface;
 use App\Entity\RoundSettings;
 
-class RoundSettingsManager implements RoundSettingsManagementInterface {
-
-    private $repo;
-    private $entityMngr;
+class RoundSettingsManager extends AbstractManager implements RoundSettingsManagementInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function insertRoundSettings($until, $roundId) {

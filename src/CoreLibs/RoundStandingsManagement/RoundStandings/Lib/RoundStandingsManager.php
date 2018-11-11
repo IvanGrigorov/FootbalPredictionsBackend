@@ -1,18 +1,15 @@
 <?php
 
 namespace App\CoreLibs\RoundStandingsManagement\RoundStandings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RoundStandingsManagement\RoundStandings\Interfaces\RoundStandingsManagementInterface;
 use App\Entity\RoundStandings;
 
-class RoundStandingsManager implements RoundStandingsManagementInterface {
-
-    private $repo;
-    private $entityMngr;
+class RoundStandingsManager extends AbstractManager implements RoundStandingsManagementInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     function getRoundStandingsForAllUsers($roundId) {

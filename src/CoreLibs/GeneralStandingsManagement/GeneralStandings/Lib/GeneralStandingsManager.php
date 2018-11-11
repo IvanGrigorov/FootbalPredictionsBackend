@@ -1,18 +1,14 @@
 <?php
 
 namespace App\CoreLibs\GeneralStandingsManagement\GeneralStandings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\GeneralStandingsManagement\GeneralStandings\Interfaces\GeneralStandingsManagerInterface;
 use App\Entity\Standings;
 
-class GeneralStandingsManager implements GeneralStandingsManagerInterface {
+class GeneralStandingsManager extends AbstractManager implements GeneralStandingsManagerInterface {
 
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function getCurrentGeneralStandingsForUser($gameId, $userId) {

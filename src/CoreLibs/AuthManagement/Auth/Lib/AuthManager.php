@@ -1,6 +1,7 @@
 <?php
 
 namespace App\CoreLibs\AuthManagement\Auth\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use \App\CoreLibs\AuthManagement\Auth\Interfaces\AuthInterface;
 use App\CoreLibs\AuthManagement\AuthenticateHelpers;
 use App\Entity\Users;
@@ -9,15 +10,10 @@ use App\Entity\AuthenticationTokens;
 
 
 
-class AuthManager implements AuthInterface {
+class AuthManager extends AbstractManager implements AuthInterface {
 
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     function signUp($username, $hashedPass) {

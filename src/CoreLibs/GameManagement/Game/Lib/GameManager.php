@@ -1,21 +1,17 @@
 <?php 
 
 namespace App\CoreLibs\GameManagement\Game\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use \App\CoreLibs\GameManagement\Game\Interfaces\GameMngmntInterface;
 use App\Entity\Games;
 
 
 
 
-class GameManager implements GameMngmntInterface {
+class GameManager extends AbstractManager implements GameMngmntInterface {
     
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function getAllGames() {

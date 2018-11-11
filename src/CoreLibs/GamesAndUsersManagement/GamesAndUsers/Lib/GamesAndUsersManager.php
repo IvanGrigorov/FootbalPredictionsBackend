@@ -1,18 +1,14 @@
 <?php
 
 namespace App\CoreLibs\GamesAndUsersManagement\GamesAndUsers\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\GamesAndUsersManagement\GamesAndUsers\Interfaces\GamesAndUsersManagementInterface;
 use App\Entity\GamesAndUsers;
 
-class GamesAndUsersManager implements GamesAndUsersManagementInterface {
+class GamesAndUsersManager extends AbstractManager implements GamesAndUsersManagementInterface {
 
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function getAllUsersForGame($gameId) {
