@@ -9,11 +9,15 @@ class PredictionsManager implements PredictionsManagementInterface {
 
     private $repo;
     private $entityMngr;
+    private $predictionsSettingsManager;
 
 
-    function __construct($repostory, $entityManager = null) {
+
+    function __construct($predictionsSettingsManager, $repostory, $entityManager = null) {
         $this->repo = $repostory;
         $this->entityMngr = $entityManager;
+        $this->predictionsSettingsManager = $predictionsSettingsManager;
+
     }
 
     
@@ -30,6 +34,16 @@ class PredictionsManager implements PredictionsManagementInterface {
     }
 
     function insertMultiplePredictions($predictionsJSON, $roundId, $userId) {
+        $predictionSettingsInfo = $this->predictionsSettingsManager->getPredictionsSettingsForRound($roundId);
+        $predictionsUntil = $predictionSettingsInfo['Msg']->getUntil();
+        date_default_timezone_set('Europe/Sofia');
+        $date = date("d-m-Y H:i:s");
+        if (date_create($date) > date_create($predictionsUntil)) {
+            return array(
+                'Error' => 'SetPredictionsError',
+                'Msg' => 'You are late with your predictions. The deadline was ' . $predictionsUntil,
+            );
+        }
         $predictions = json_decode($predictionsJSON, true);
         foreach($predictions as $prediction) {
             $this->insertPrediction($prediction['host'], $prediction['guest'], $roundId, $prediction['roundTeamsId'], $userId);
