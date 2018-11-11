@@ -8,7 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\AuthenticationTokens;
 use App\CoreLibs\AuthManagement\Auth\Lib\AuthManager;
 use App\CoreLibs\PredictionsManagement\Predictions\Lib\PredictionsManager;
+use App\CoreLibs\PredictionsSettingsManagement\PredictionsSettings\Lib\PredictionsSettingsManager;
 use App\Entity\Predictions;
+use App\Entity\PredictionSettings;
+
 
 
 
@@ -29,7 +32,9 @@ class PredictionsController extends CustomAbstractController
         $userId = $userInfo['Msg']['user_id'];
         $predictionsJSON = $request->request->get("predictions");
         $entityManager = $this->getDoctrine()->getManager();
-        $predictionsManager = new PredictionsManager(null, $entityManager);
+        $predictionsSettingsrepository = $this->getDoctrine()->getRepository(PredictionSettings::class);
+        $predictionsSettingsManager = new PredictionsSettingsManager($predictionsSettingsrepository, $entityManager);
+        $predictionsManager = new PredictionsManager($predictionsSettingsManager, null, $entityManager);
         $gameName = $request->request->get('predictions');
         return $this->json($predictionsManager->insertMultiplePredictions($predictionsJSON, $roundId, $userId));
     }
