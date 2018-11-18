@@ -1,18 +1,14 @@
 <?php
 
 namespace App\CoreLibs\PredictionsSettingsManagement\PredictionsSettings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\PredictionsSettingsManagement\PredictionsSettings\Interfaces\PredictionsSettingsManagerInterface;
 use App\Entity\PredictionSettings;
 
-class PredictionsSettingsManager implements PredictionsSettingsManagerInterface {
+class PredictionsSettingsManager extends AbstractManager implements PredictionsSettingsManagerInterface {
 
-    private $repo;
-    private $entityMngr;
-
-
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function setPredictionsSettingsForRound($roundId, $untilDate) {

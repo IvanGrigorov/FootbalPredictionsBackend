@@ -50,6 +50,7 @@ class RoundsRepository extends ServiceEntityRepository
 
     public function findAllRoundsForGameId($gameId) {
         return $this->createQueryBuilder('r')
+            ->select('r.id', 'r.RoundNumber', 'r.GamesId')
             ->andWhere('r.GamesId = :val')
             ->setParameter('val', $gameId)
             ->getQuery()

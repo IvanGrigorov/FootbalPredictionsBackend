@@ -1,21 +1,18 @@
 <?php
 
 namespace App\CoreLibs\RoundGenerationStatusManagement\RoundGenerationStatus\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RoundGenerationStatusManagement\RoundGenerationStatus\Interfaces\RoundGenerationStatusManagerInterface;
 use App\Entity\RoundGenerationStatus;
 
 
 
 
-class RoundGenerationStatusManager implements RoundGenerationStatusManagerInterface {
-
-    private $repo;
-    private $entityMngr;
+class RoundGenerationStatusManager extends AbstractManager implements RoundGenerationStatusManagerInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function setStatusForRound($roundId) {

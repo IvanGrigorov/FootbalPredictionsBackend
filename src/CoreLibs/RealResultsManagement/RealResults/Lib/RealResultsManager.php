@@ -1,19 +1,16 @@
 <?php
 
 namespace App\CoreLibs\RealResultsManagement\RealResults\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RealResultsManagement\RealResults\Interfaces\RealResultsManagementInterface;
 use App\Entity\RealResults;
 
 
-class RealResultsManager implements RealResultsManagementInterface {
-
-    private $repo;
-    private $entityMngr;
+class RealResultsManager extends AbstractManager implements RealResultsManagementInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     

@@ -34,7 +34,7 @@ class PredictionsController extends CustomAbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $predictionsSettingsrepository = $this->getDoctrine()->getRepository(PredictionSettings::class);
         $predictionsSettingsManager = new PredictionsSettingsManager($predictionsSettingsrepository, $entityManager);
-        $predictionsManager = new PredictionsManager($predictionsSettingsManager, null, $entityManager);
+        $predictionsManager = new PredictionsManager(null, $entityManager, $predictionsSettingsManager);
         $gameName = $request->request->get('predictions');
         return $this->json($predictionsManager->insertMultiplePredictions($predictionsJSON, $roundId, $userId));
     }

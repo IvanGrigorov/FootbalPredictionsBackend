@@ -1,16 +1,15 @@
 <?php
 
 namespace App\CoreLibs\GenerationStandingsManagement\GenerationStandings\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\GenerationStandingsManagement\GenerationStandings\Interfaces\GenerationStandingsManagementInterface;
 use App\Entity\Predictions;
 
 
 
 
-class GenerationStandingsManager implements GenerationStandingsManagementInterface {
+class GenerationStandingsManager extends AbstractManager implements GenerationStandingsManagementInterface {
 
-    private $repo;
-    private $entityMngr;
     private $gameAndUsersManager;
     private $predictionsManager;
     private $realResultsManager;
@@ -19,10 +18,9 @@ class GenerationStandingsManager implements GenerationStandingsManagementInterfa
     private $roundGenerationStatusManager;
     private $pointStandingsManager;
 
-    //function __construct($authManager, $gameAndUsersManager, $repostory, $entityManager = null) {
-    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $roundGenerationStatusManager, $pointStandingsManager, $repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    //function __construct($authManager, $gameAndUsersManager, $repository, $entityManager = null) {
+    function __construct($gameAndUsersManager, $predictionsManager, $realResultsManager, $roundStandingsManager, $generalStandingsManager, $roundGenerationStatusManager, $pointStandingsManager, $repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
         $this->gameAndUsersManager = $gameAndUsersManager;
         $this->predictionsManager = $predictionsManager;
         $this->realResultsManager = $realResultsManager;

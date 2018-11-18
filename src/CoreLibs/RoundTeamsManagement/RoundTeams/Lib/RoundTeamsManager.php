@@ -1,18 +1,15 @@
 <?php
 
 namespace App\CoreLibs\RoundTeamsManagement\RoundTeams\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RoundTeamsManagement\RoundTeams\Interfaces\RoundTeamsManagerInterface;
 use App\Entity\RoundTeams;
 
-class RoundTeamsManager implements RoundTeamsManagerInterface {
-
-    private $repo;
-    private $entityMngr;
+class RoundTeamsManager extends AbstractManager implements RoundTeamsManagerInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     public function insertRoundTeams($host, $guest, $roundId) {

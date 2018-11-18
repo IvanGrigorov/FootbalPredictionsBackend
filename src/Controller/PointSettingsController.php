@@ -22,7 +22,7 @@ class PointSettingsController extends CustomAbstractController
     }
 
     /**
-     * @Route("{gameId}/point/settings/update", name="point_settings_insert")
+     * @Route("{gameId}/point/settings/update", name="point_settings_update")
      */
     public function pointSettingsUpdate($gameId, Request $request)
     {

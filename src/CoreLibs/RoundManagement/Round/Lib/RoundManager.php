@@ -1,19 +1,16 @@
 <?php
 
 namespace App\CoreLibs\RoundManagement\Round\Lib;
+use App\CoreLibs\AbstractManagement\AbstractManager;
 use App\CoreLibs\RoundManagement\Round\Interfaces\RoundInterface;
 use App\Entity\Rounds;
 
 
-class RoundManager implements RoundInterface {
-
-    private $repo;
-    private $entityMngr;
+class RoundManager extends AbstractManager implements RoundInterface {
 
 
-    function __construct($repostory, $entityManager = null) {
-        $this->repo = $repostory;
-        $this->entityMngr = $entityManager;
+    function __construct($repository, $entityManager = null) {
+        parent::__construct($repository, $entityManager);
     }
 
     
@@ -34,14 +31,16 @@ class RoundManager implements RoundInterface {
     
     public function getAllRoundsForGameId($gameId) {
         $allRoundsForGameId = $this->repo->findAllRoundsForGameId($gameId);
-        $convertedRounds = array();
-        foreach($allRoundsForGameId as $round) {
-            $convertedRounds[] = $round->formatRound();
-        }
+        //$convertedRounds = array();
+        //foreach($allRoundsForGameId as $round) {
+        //    $convertedRounds[] = $round->formatRound();
+        //}
 
         return array(
-            'Success' => 'GettingAllGames',
-            'Msg' => $convertedRounds,
+            'Success' => 'GettingAllRounds',
+            //'Msg' => $convertedRounds,
+            'Msg' => $allRoundsForGameId,
+
         );
     }
 
