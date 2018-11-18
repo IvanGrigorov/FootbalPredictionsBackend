@@ -43,4 +43,18 @@ class RoundTeamsManager extends AbstractManager implements RoundTeamsManagerInte
     public function insertTeamsForRound($roundId, $teamsJSON) {
         
     }
+
+    public function updateRoundTeamsForRound($roundTeamsManager, $host, $guest) {
+        $teamsToUpdate = $this->repo->findTeamsById($roundTeamsManager);
+        $teamsToUpdate->setHost($host);
+        $teamsToUpdate->setGuest($guest);
+        $this->entityMngr->persist($teamsToUpdate);
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'UpdateRoundTeams',
+            'Msg' => 'The  teams has been updated successfully',
+        );
+
+    }
+
 }

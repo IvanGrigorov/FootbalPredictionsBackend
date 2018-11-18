@@ -40,4 +40,17 @@ class RealResultsManager extends AbstractManager implements RealResultsManagemen
         );
     }
 
+    public function updateRealResultsForRound($realResultsId, $hostResult, $guestResult) {
+        $resultsById = $this->repo->getRealResultsForId($realResultsId);
+        $resultsById->setHost($hostResult);
+        $resultsById->setGuest($guestResult);
+        $this->entityMngr->persist($resultsById);
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'UpdatingRealResults',
+            'Msg' => 'The realResults have been updated successfully',
+        );
+    }
+
+
 }

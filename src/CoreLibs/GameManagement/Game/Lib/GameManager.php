@@ -47,5 +47,16 @@ class GameManager extends AbstractManager implements GameMngmntInterface {
         );    
     }
 
+    function updateGame($gameId, $gameName) {
+        $game = $this->repo->findGameById($gameId);
+        $game->setName($gameName);
+        $this->entityMngr->persist($game);
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'UpdatingTheGame',
+            'Msg' => 'The game '. $gameName . ' has been inserted successfully',
+        );
+
+    }
 
 }

@@ -43,4 +43,23 @@ class GamesController extends CustomAbstractController
 
     }
 
+    /**
+     * @Route("{gameId}/update/game", name="update_game")
+     */
+    public function updateGame($gameId, Request $request) {
+
+        //$isAdminLogged = $this->checkIfAdminIsLogged($request);
+
+        //if (isset($isAdminLogged['Error'])) {
+        //    return $this->json($isAdminLogged);
+        //}
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(Games::class);
+        $gameManager = new GameManager($repository, $entityManager);
+        $gameName = $request->request->get('gameName');
+        return $this->json($gameManager->updateGame($gameId, $gameName));
+
+    }
+
 }
