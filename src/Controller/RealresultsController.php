@@ -34,4 +34,17 @@ class RealresultsController extends CustomAbstractController
         $realResultsManager = new RealResultsManager($repository);
         return $this->json($realResultsManager->getRealResultsForRound($roundId));
     }
+
+    /**
+     * @Route("{realResultsId}/results/update", name="realresults_update", methods={"POST"})
+     */
+    public function updateRealResultsForId($realResultsId, Request $request)
+    {
+        $hostResult = $request->request->get("hostResult");
+        $guestResult = $request->request->get("guestResult");
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(RealResults::class);
+        $realResultsManager = new RealResultsManager($repository, $entityManager);
+        return $this->json($realResultsManager->updateRealResultsForRound($realResultsId, $hostResult, $guestResult));
+    }
 }

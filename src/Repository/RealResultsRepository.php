@@ -57,4 +57,13 @@ class RealResultsRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function getRealResultsForId($id) {
+        return $this->createQueryBuilder('rr')
+            ->andWhere('rr.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

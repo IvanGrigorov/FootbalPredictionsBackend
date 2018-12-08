@@ -55,4 +55,12 @@ class RoundTeamsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findTeamsById($roundTeamsId) {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.id = :val')
+            ->setParameter('val', $roundTeamsId)
+            ->getQuery()
+            ->getOneOrNullResult();    
+        }
 }

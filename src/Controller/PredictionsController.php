@@ -38,4 +38,30 @@ class PredictionsController extends CustomAbstractController
         $gameName = $request->request->get('predictions');
         return $this->json($predictionsManager->insertMultiplePredictions($predictionsJSON, $roundId, $userId));
     }
+
+    /**
+     * @Route("{roundId}/{predictionsId}/predictions/update", name="predictions_update")
+     */
+    public function updatePredictions($roundId, $predictionsId, Request $request) {
+        $entityManager = $this->getDoctrine()->getManager();
+        $predictionsrepository = $this->getDoctrine()->getRepository(Predictions::class);
+        $predictionsSettingsrepository = $this->getDoctrine()->getRepository(PredictionSettings::class);
+        $predictionsSettingsManager = new PredictionsSettingsManager($predictionsSettingsrepository, $entityManager);
+        $predictionsManager = new PredictionsManager($predictionsrepository, $entityManager, $predictionsSettingsManager);
+        $hostResult = $request->request->get('hostResult');
+        $guestResult = $request->request->get('guestResult');
+        return $this->json($predictionsManager->updatePredictions($roundId, $predictionsId, $hostResult, $guestResult));
+
+    }
+
+    /**
+     * @Route("{userId}/{roundId}/predictions", name="predictions_for_user")
+     */
+    public function getUserPredictions($userId, $roundId, Request $request) {
+        $predictionsrepository = $this->getDoctrine()->getRepository(Predictions::class);
+        $predictionsManager = new PredictionsManager($predictionsrepository, null, null);
+        return $this->json($predictionsManager->getPredictionForRoundByUserId($userId, $roundId));
+
+    }
+
 }

@@ -48,4 +48,21 @@ class RoundTeamsController extends CustomAbstractController
 
     }
 
+    /**
+     * @Route("{roundTeamsId}/teams/update", name="round_teams_update")
+     */
+    public function updateTeamsForRound($roundTeamsId, Request $request) {
+        $repository = $this->getDoctrine()->getRepository(RoundTeams::class);
+        
+        $host = $request->request->get('host');
+        $guest = $request->request->get('guest');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $roundTeamsManager = new RoundTeamsManager($repository, $entityManager);
+        return $this->json($roundTeamsManager->updateRoundTeamsForRound($roundTeamsId, $host, $guest));
+
+
+
+    }
+
 }

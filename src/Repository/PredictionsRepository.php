@@ -67,5 +67,14 @@ class PredictionsRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findPredictionsForRoundById($predictionsId) {
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.id = :val')
+        ->setParameter('val', $predictionsId)
+        ->getQuery()
+        ->getOneOrNullResult()
+        ;
+    }
     
 }

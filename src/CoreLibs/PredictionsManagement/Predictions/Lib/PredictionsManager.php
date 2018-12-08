@@ -66,6 +66,37 @@ class PredictionsManager extends AbstractManager implements PredictionsManagemen
         );
     }
 
+    public function updatePredictions($roundId, $predictionsId, $hostResult, $guestResult) {
+        $arePredictionsLate = $this->checkIfPredictionsAreLate($roundId);
+        if ($arePredictionsLate) {
+            return $arePredictionsLate;
+        }
+        $predictionsById = $this->repo->findPredictionsForRoundById($predictionsId);
+        $predictionsById->setHost($hostResult);
+        $predictionsById->setGuest($guestResult);
+        $this->entityMngr->persist($predictionsById);
+        $this->entityMngr->flush();
+        return array(
+            'Success' => 'UpdatePredictionsSuccessfuly',
+            'Msg' => 'PredictionsUpdateSuccess',
+        );
+    }
+
+    private function checkIfPredictionsAreLate($roundId) {
+        $predictionSettingsInfo = $this->predictionsSettingsManager->getPredictionsSettingsForRound($roundId);
+        $predictionsUntil = $predictionSettingsInfo['Msg']->getUntil();
+        date_default_timezone_set('Europe/Sofia');
+        $date = date("d-m-Y H:i:s");
+        if (date_create($date) > date_create($predictionsUntil)) {
+            return array(
+                'Error' => 'SetPredictionsError',
+                'Msg' => 'You are late with your predictions. The deadline was ' . $predictionsUntil,
+            );
+        }
+        return false;
+    }
+
+
         //$realResultsDecoded = json_decode($realResultsJSON, true);
         //foreach ($realResultsDecoded as $realResultsObject) {
         //    $realResults = new RealResults();
