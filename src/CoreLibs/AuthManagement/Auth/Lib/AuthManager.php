@@ -51,7 +51,7 @@ class AuthManager extends AbstractManager implements AuthInterface {
     function logIn($username, $hashedPass) {
         // Check for same username 
         $userIfExistsByUsername = $this->repo->findOneByUsername($username);
-        if (!empty($sameUsernameEntities)) {
+        if (empty($userIfExistsByUsername)) {
             return
                 array(
                     'Error' => 'NoSuchUserError',
