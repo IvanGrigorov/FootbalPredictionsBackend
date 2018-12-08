@@ -16,14 +16,14 @@ class GameManager extends AbstractManager implements GameMngmntInterface {
 
     public function getAllGames() {
         $allGames = $this->repo->findAllGames();
-        $convertedGames = array();
-        foreach($allGames as $game) {
-            $convertedGames[] = $game->formatGame();
-        }
+        //$convertedGames = array();
+        //foreach($allGames as $game) {
+        //    $convertedGames[] = $game->formatGame();
+        //}
 
         return array(
             'Success' => 'GettingAllGames',
-            'Msg' => $convertedGames,
+            'Msg' => $allGames,
         );
     }
 

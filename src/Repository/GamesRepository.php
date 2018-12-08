@@ -49,6 +49,7 @@ class GamesRepository extends ServiceEntityRepository
     */
     public function findAllGames() {
         return $this->createQueryBuilder('g')
+            ->select('g.id', 'g.name')
             ->getQuery()
             ->getResult();
     }
