@@ -59,10 +59,7 @@ class RoundController extends CustomAbstractController
         $repository = $this->getDoctrine()->getRepository(Rounds::class);
         $roundManager = new RoundManager($repository);
 
-        return $this->json([
-            'Success' => 'InsertNewRound',
-            'Msg' => $roundManager->getAllRoundsForGameId($game)
-        ]);
+        return $this->json( $roundManager->getAllRoundsForGameId($game));
 
     }
 }

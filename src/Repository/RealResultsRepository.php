@@ -50,8 +50,10 @@ class RealResultsRepository extends ServiceEntityRepository
 
     public function getRealResultsForRoundId($roundId) {
         return $this->createQueryBuilder('rr')
-            ->select('rr.RoundTeamsId', 'rr.Host', 'rr.Guest', 'rr.RoundId')
+            ->select('rr.RoundTeamsId', 'rr.Host', 'rr.Guest', 'rr.RoundId', 'rt.Host as HostTeam', 'rt.Guest as GuestTeam')
+            ->from('App\Entity\RoundTeams', 'rt')
             ->andWhere('rr.RoundId = :val')
+            ->andWhere('rr.RoundTeamsId = rt.id')
             ->setParameter('val', $roundId)
             ->getQuery()
             ->getResult()
