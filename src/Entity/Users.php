@@ -95,7 +95,8 @@ class Users
     public function formatUser() {
         return array(
             'name' => $this->getName(),
-            'role' => $this->getRole()
+            'role' => $this->getRole(),
+            'id' => $this->getId()
         );
     }
 }
