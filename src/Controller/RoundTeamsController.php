@@ -19,11 +19,11 @@ class RoundTeamsController extends CustomAbstractController
     public function insertRoundTeams($round, Request $request)
     {
 
-        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+        //$isAdminLogged = $this->checkIfAdminIsLogged($request);
 
-        if (isset($isAdminLogged['Error'])) {
-            return $this->json($isAdminLogged);
-        }
+        //if (isset($isAdminLogged['Error'])) {
+        //    return $this->json($isAdminLogged);
+        //}
 
         $host = $request->request->get('host');
         $guest = $request->request->get('guest');
