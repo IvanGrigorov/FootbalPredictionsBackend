@@ -14,15 +14,14 @@ use App\Entity\RealResults;
 class RealresultsController extends CustomAbstractController
 {
     /**
-     * @Route("/results/real", name="realresults_insert", methods={"POST"})
+     * @Route("{roundId}/results/real", name="realresults_insert", methods={"POST"})
      */
-    public function setRealResultsForRound($roundTeams, Request $request)
+    public function setRealResultsForRound($roundId, Request $request)
     {
-        $roundTeamsId = $roundTeams;
         $resultsJSON = $request->request->get("results");
         $entityManager = $this->getDoctrine()->getManager();
         $realResultsManager = new RealResultsManager(null, $entityManager);
-        return $this->json($realResultsManager->insertRealResults($resultsJSON));
+        return $this->json($realResultsManager->insertRealResults($resultsJSON, $roundId));
     }
 
     /**

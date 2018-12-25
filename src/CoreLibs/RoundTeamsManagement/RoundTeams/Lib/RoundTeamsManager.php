@@ -35,7 +35,7 @@ class RoundTeamsManager extends AbstractManager implements RoundTeamsManagerInte
         }
 
         return array(
-            'Success' => 'GettingAllGames',
+            'Success' => 'GettingAllRoundTeams',
             'Msg' => $convertedTeams,
         );
     }
