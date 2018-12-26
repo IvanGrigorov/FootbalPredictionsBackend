@@ -76,7 +76,8 @@ class RoundTeams
         return array(
             'host' => $this->getHost(),
             'guest' => $this->getGuest(),
-            'roundId' => $this->getRoundId()
+            'roundId' => $this->getRoundId(),
+            'id' => $this->getId()
         );
     }
 }

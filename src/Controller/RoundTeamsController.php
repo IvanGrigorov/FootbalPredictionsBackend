@@ -36,7 +36,7 @@ class RoundTeamsController extends CustomAbstractController
     }
 
     /**
-     * @Route("{round}/teams/", name="round_teams")
+     * @Route("{round}/teams", name="round_teams")
      */
     public function getTeamsForRound($round, Request $request) {
         $roundId = $round;

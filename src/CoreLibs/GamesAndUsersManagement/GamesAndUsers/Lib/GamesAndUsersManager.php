@@ -28,7 +28,7 @@ class GamesAndUsersManager extends AbstractManager implements GamesAndUsersManag
         $this->entityMngr->flush();  
         return array(
             'Success' => 'SetUserForGameSuccessfuly',
-            'Msg' => 'UserForGameSetSuccess',
+            'Msg' => 'User added in the game',
         );    
     }
 }

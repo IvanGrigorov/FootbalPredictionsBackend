@@ -14,7 +14,7 @@ class RealResultsManager extends AbstractManager implements RealResultsManagemen
     }
 
     
-    public function insertRealResults($realResultsJSON) {
+    public function insertRealResults($realResultsJSON, $roundId) {
 
         $realResultsDecoded = json_decode($realResultsJSON, true);
         foreach ($realResultsDecoded as $realResultsObject) {
@@ -22,6 +22,7 @@ class RealResultsManager extends AbstractManager implements RealResultsManagemen
             $realResults->setRoundTeamsId($realResultsObject['roundTeamsId']);
             $realResults->setHost($realResultsObject['host']);
             $realResults->setGuest($realResultsObject['guest']);
+            $realResults->setRoundId($roundId);
             $this->entityMngr->persist($realResults);
             $this->entityMngr->flush();
         }
