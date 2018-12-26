@@ -20,11 +20,11 @@ class RoundController extends CustomAbstractController
      */
     public function createRound(Request $request)
     {
-        $isAdminLogged = $this->checkIfAdminIsLogged($request);
+        //$isAdminLogged = $this->checkIfAdminIsLogged($request);
 
-        if (isset($isAdminLogged['Error'])) {
-            return $this->json($isAdminLogged);
-        }
+        //if (isset($isAdminLogged['Error'])) {
+        //    return $this->json($isAdminLogged);
+        //}
         
         // Move this in Round Manager maybe or maybe pass gameId as parameters
         $repository = $this->getDoctrine()->getRepository(Games::class);

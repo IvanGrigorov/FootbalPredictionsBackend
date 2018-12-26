@@ -23,7 +23,7 @@ class RoundManager extends AbstractManager implements RoundInterface {
         $this->entityMngr->flush();
         return array(
             'Success' => 'InsertingRound',
-            'Msg' => 'The round has been inserted successfully',
+            'Msg' => $round->getId(),
         );
 
     }
