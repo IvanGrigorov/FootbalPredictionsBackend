@@ -61,4 +61,15 @@ class GamesAndUsersRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function getUserIFExists($gameId, $userId) {
+        return $this->createQueryBuilder('g')
+        ->andWhere('g.GameId = :gameId')
+        ->andWhere('g.UserId = :userId')
+        ->setParameter('gameId', $gameId)
+        ->setParameter('userId', $userId)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+    }
 }

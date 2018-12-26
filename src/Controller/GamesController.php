@@ -8,6 +8,7 @@ use App\Entity\Games;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\AbstractController\CustomAbstractController;
 use App\CoreLibs\GameManagement\Game\Lib\GameManager;
+use App\CoreLibs\PointSettingsManagement\PointSettings\Lib\PointSettingsManager;
 
 class GamesController extends CustomAbstractController
 {
@@ -39,7 +40,16 @@ class GamesController extends CustomAbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $gameManager = new GameManager(null, $entityManager);
         $gameName = $request->request->get('gameName');
-        return $this->json($gameManager->insertGame($gameName));
+        $gameInsertInfo = $gameManager->insertGame($gameName);
+        // Default points for game
+        $pointSettingsManager = new PointSettingsManager(null, $entityManager);
+        $pointsArray = array(
+            'PointsCorrectResult' => 5,
+            'PointsCorrectFixture' =>  3,
+            'PointsAmountOfGoals' => 0,
+        );
+        $pointSettingsManager->setPointSettingsForGame($gameInsertInfo['gameId'], json_encode($pointsArray));
+        return $this->json($gameInsertInfo['info']);
 
     }
 
