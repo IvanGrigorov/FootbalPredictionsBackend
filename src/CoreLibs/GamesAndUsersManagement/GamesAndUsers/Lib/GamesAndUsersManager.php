@@ -31,4 +31,15 @@ class GamesAndUsersManager extends AbstractManager implements GamesAndUsersManag
             'Msg' => 'User added in the game',
         );    
     }
+
+    public function isUserPartOfTheGame($gameId, $userId) {
+        $usersForGame = $this->repo->getUserIFExists($gameId, $userId);
+        if ($usersForGame) {
+            true;
+        }
+        else {
+            false;
+        }
+        
+    }
 }

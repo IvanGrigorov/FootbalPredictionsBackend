@@ -32,10 +32,14 @@ class GameManager extends AbstractManager implements GameMngmntInterface {
         $game->setName($gameName);
         $this->entityMngr->persist($game);
         $this->entityMngr->flush();
-        return array(
-            'Success' => 'InsertingTheGame',
-            'Msg' => 'The game '. $gameName . ' has been inserted successfully',
+        $info = array(
+            'info' => array(
+                'Success' => 'InsertingTheGame',
+                'Msg' => 'The game '. $gameName . ' has been inserted successfully',
+                ),
+            'gameId' => $game->getId()
         );
+        return $info;
     }
 
     function getGameIdByName($gameName) {
